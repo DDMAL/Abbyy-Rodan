@@ -1,0 +1,11 @@
+- mimetype: image/rgb+png
+  extension: png
+- mimetype: image/onebit+png
+  extension: png
+- mimetype: image/greyscale+png
+  extension: png
+- mimetype: image/grey16+png
+  extension: png
+- mimetype: application/abbyy+xml
+  description: Abbyy output XML
+  extension: xml
