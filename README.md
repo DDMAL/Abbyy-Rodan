@@ -1,9 +1,2 @@
-Abbyy Wrapper
-=============
-
-RODAN wrapper for the Abbyy OCR package
-
-Requirements
-------------
-
-* Abbyy Linux CLI software package
+# Abbyy-Rodan
+Wrappers for Abbyy to work in Rodan
