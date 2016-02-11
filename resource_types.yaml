@@ -1,3 +1,5 @@
+- mimetype: image/png
+  extension: png
 - mimetype: image/rgb+png
   extension: png
 - mimetype: image/onebit+png
@@ -6,6 +8,34 @@
   extension: png
 - mimetype: image/grey16+png
   extension: png
+
+- mimetype: image/jpeg
+  description: JPEG
+  extension: jpeg 	#also: jpg, jpe, jif,jfif, jfi
+
+- mimetype: image/jp2 #or image/jpx or image/jpm or image/mj2
+  description: JPEG2000
+  extension: jp2 	#also: j2k, jpf, jpx, jpm, mj2
+
+- mimetype: image/tiff
+  description: TIFF
+  extension: tiff 	#also: tif 
+  
+- mimetype: image/bmp
+  description: BMP (Generic Bitmap)
+  extension: bmp 	#also: dib
+
+- mimetype: image/x-pcx
+  description: PCX (Paintbrush Bitmap)
+  extension: pcx
+
+- mimetype: image/x-dcx
+  description: DCX (Multi-page PCX)
+  extension: dcx
+
+- mimetype: application/pdf
+  extension: pdf
+
 - mimetype: application/abbyy+xml
   description: Abbyy output XML
   extension: xml
