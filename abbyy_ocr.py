@@ -28,12 +28,8 @@ class AbbyyOCR(RodanTask):
     interactive = False
 
     input_port_types = [{
-        'name': 'Input image',
+        'name': 'input_image',
         'resource_types': ['image/png',
-                           'image/rgb+png',
-                           'image/greyscale+png',
-                           'image/grey16+png',
-                           'image/onebit+png',
                            'image/jpeg',
                            'image/jp2',
                            'image/tiff',
@@ -45,7 +41,7 @@ class AbbyyOCR(RodanTask):
         'maximum': 1
     }]
     output_port_types = [{
-        'name': 'Output XML',
+        'name': 'export_file',
         'resource_types': ['application/abbyy+xml'],
         'minimum': 1,
         'maximum': 1
@@ -53,28 +49,121 @@ class AbbyyOCR(RodanTask):
 
     def run_my_task(self, inputs, settings, outputs):
         # The 3 parameters we are giving Abbyy to do OCR: the input and output files, and the language recognition key
-        input_file = inputs['input_image'][0]['resource_path']  # Question (the fixed number --> gives me some trouble with the definition of the input dictionary in the test_my_task method)
+        input_file = inputs['input_image'][0]['resource_path']
         output_file = outputs['export_file'][0]['resource_path']
-        language_recognition = "-rl " + settings['properties']['Languages']['default']  # For now it is "English" --> at which stage is this parameter defined? 
+        language_recognition_key = ""
+        if settings['Languages'] == 0:
+        	language_recognition_key = "-rl English"
+        else if settings['Languages'] == 1:
+        	language_recognition_key = "-rl Italian"
         # CL Abbyy instruction for OCR
-        abbyy_instruction = "abbyyocr11 " + language_recognition + " -if " + input_file  + " -f " + "XML" + " -of " + output_file
+        abbyy_instruction = "abbyyocr11 " + language_recognition_key + " -if " + input_file  + " -f " + "XML" + " -of " + output_file
         subprocess.call(abbyy_instruction)
         return True
 
-    # Still in process
+    # # Still in process   
     # def test_my_task(self, testcase):
-    #     inputs ={
-    #         'input_image' : [ {'resource_path' : testcase.new_available_path() , 'resource_type' : 'image/png'},
-    #                     {'resource_path' : testcase.new_available_path() , 'resource_type' : 'image/rgb+png'},
-    #                     {'resource_path' : testcase.new_available_path() , 'resource_type' : 'image/greyscale+png'},
-    #                     {'resource_path' : testcase.new_available_path() , 'resource_type' : 'image/grey16+png'},
-    #                     {'resource_path' : testcase.new_available_path() , 'resource_type' : 'image/onebit+png'},
-    #                     {'resource_path' : testcase.new_available_path() , 'resource_type' : 'image/jpeg'},
-    #                     {'resource_path' : testcase.new_available_path() , 'resource_type' : 'image/jp2'},
-    #                     {'resource_path' : testcase.new_available_path() , 'resource_type' : 'image/tiff'},
-    #                     {'resource_path' : testcase.new_available_path() , 'resource_type' : 'image/bmp'},
-    #                     {'resource_path' : testcase.new_available_path() , 'resource_type' : 'image/x-pcx'},
-    #                     {'resource_path' : testcase.new_available_path() , 'resource_type' : 'image/x-dcx'},
-    #                     {'resource_path' : testcase.new_available_path(), 'resource_type' : 'application/pdf'} ] }
-    #     outputs = { 'export_file' : [{'resource_path' : testcase.new_available_path() , 'resource_type' : 'application/abbyy+xml'}] }
+    # # Test formats
+    #     outputs = {
+    #         'export_file': [
+    #             {'resource_type': 'application/abbyy+xml',
+    #              'resource_path': testcase.new_available_path()
+    #             }
+    #         ]
+    #     }
+
+    #     inputs = {
+    #         'input_image': [
+    #             {'resource_type': 'image/png',
+    #              'resource_path': testcase.new_available_path()
+    #             }
+    #         ]
+    #     }
+    #     PIL.Image.new("RGBA", size=(50, 50), color=(256, 0, 0)).save(inputs['input_image'][0]['resource_path'], 'PNG')
     #     self.run_my_task(inputs, {}, outputs)
+    #     #result = PIL.Image.open(outputs['export_file'][0]['resource_path'])	# IT IS AN XML, SO THESE TWO LINES MAY BE USELESS!
+    #     #testcase.assertEqual(result.format, 'XML')
+
+    #     inputs = {
+    #         'input_image': [
+    #             {'resource_type': 'image/jpeg',
+    #              'resource_path': testcase.new_available_path()
+    #             }
+    #         ]
+    #     }
+    #     PIL.Image.new("RGBA", size=(50, 50), color=(256, 0, 0)).save(inputs['input_image'][0]['resource_path'], 'JPEG')
+    #     self.run_my_task(inputs, {}, outputs)
+    #     #result = PIL.Image.open(outputs['export_file'][0]['resource_path'])
+    #     #testcase.assertEqual(result.format, 'XML')
+
+    #     inputs = {
+    #         'input_image': [
+    #             {'resource_type': 'image/jp2',
+    #              'resource_path': testcase.new_available_path()
+    #             }
+    #         ]
+    #     }
+    #     PIL.Image.new("RGBA", size=(50, 50), color=(256, 0, 0)).save(inputs['input_image'][0]['resource_path'], 'JPEG2000')
+    #     self.run_my_task(inputs, {}, outputs)
+    #     #result = PIL.Image.open(outputs['export_file'][0]['resource_path'])
+    #     #testcase.assertEqual(result.format, 'XML')
+
+    #     inputs = {
+    #         'input_image': [
+    #             {'resource_type': 'image/tiff',
+    #              'resource_path': testcase.new_available_path()
+    #             }
+    #         ]
+    #     }
+    #     PIL.Image.new("RGBA", size=(50, 50), color=(256, 0, 0)).save(inputs['input_image'][0]['resource_path'], 'TIFF')
+    #     self.run_my_task(inputs, {}, outputs)
+    #     #result = PIL.Image.open(outputs['export_file'][0]['resource_path'])
+    #     #testcase.assertEqual(result.format, 'XML')
+
+    #     inputs = {
+    #         'input_image': [
+    #             {'resource_type': 'image/bmp',
+    #              'resource_path': testcase.new_available_path()
+    #             }
+    #         ]
+    #     }
+    #     PIL.Image.new("RGBA", size=(50, 50), color=(256, 0, 0)).save(inputs['input_image'][0]['resource_path'], 'BMP')
+    #     self.run_my_task(inputs, {}, outputs)
+    #     #result = PIL.Image.open(outputs['export_file'][0]['resource_path'])
+    #     #testcase.assertEqual(result.format, 'XML')
+
+    #     inputs = {
+    #         'input_image': [
+    #             {'resource_type': 'image/x-pcx',
+    #              'resource_path': testcase.new_available_path()
+    #             }
+    #         ]
+    #     }
+    #     PIL.Image.new("RGBA", size=(50, 50), color=(256, 0, 0)).save(inputs['input_image'][0]['resource_path'], 'PCX')
+    #     self.run_my_task(inputs, {}, outputs)
+    #     #result = PIL.Image.open(outputs['export_file'][0]['resource_path'])
+    #     #testcase.assertEqual(result.format, 'XML')
+
+    #     inputs = {
+    #         'input_image': [
+    #             {'resource_type': 'image/x-dcx',
+    #              'resource_path': testcase.new_available_path()
+    #             }
+    #         ]
+    #     }
+    #     PIL.Image.new("RGBA", size=(50, 50), color=(256, 0, 0)).save(inputs['input_image'][0]['resource_path'], 'DCX')
+    #     self.run_my_task(inputs, {}, outputs)
+    #     #result = PIL.Image.open(outputs['export_file'][0]['resource_path'])
+    #     #testcase.assertEqual(result.format, 'XML')
+
+    #     inputs = {
+    #         'input_image': [
+    #             {'resource_type': 'application/pdf',
+    #              'resource_path': testcase.new_available_path()
+    #             }
+    #         ]
+    #     }
+    #     PIL.Image.new("RGBA", size=(50, 50), color=(256, 0, 0)).save(inputs['input_image'][0]['resource_path'], 'PDF')
+    #     self.run_my_task(inputs, {}, outputs)
+    #     #result = PIL.Image.open(outputs['export_file'][0]['resource_path'])
+    #     #testcase.assertEqual(result.format, 'XML')
