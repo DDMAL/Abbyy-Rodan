@@ -20,7 +20,7 @@
 - mimetype: image/tiff
   description: TIFF
   extension: tiff 	#also: tif 
-  
+
 - mimetype: image/bmp
   description: BMP (Generic Bitmap)
   extension: bmp 	#also: dib
