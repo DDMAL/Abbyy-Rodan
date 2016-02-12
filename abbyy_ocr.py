@@ -4,6 +4,7 @@
 #                       the capabilities of OCR form the first, inside a Rodan workflow
 # WORK IN PROGRESS
 #--------------------------------------------------------------------------------------------------
+##import PIL.Image
 import subprocess
 from rodan.jobs.base import RodanTask
 
@@ -13,15 +14,15 @@ class AbbyyOCR(RodanTask):
     description = "Performs Abbyy OCR in document"
     settings = {
         'title': 'Abbyy processing/recognition keys',
-        'type': 'object', 
-        'properties' : {
+        'type': 'object',
+        'properties': {
             'Languages' : {
-                'enum' : ['English', 'Italian'], 
-                'type' : 'string', 
-                'default' : 'English'
+                'enum': ['English', 'Italian'],
+                'type': 'string',
+                'default': 'English',
                 'description': 'Language given as a parameter to the recognition key (-rl)'
-            } 
-        } 
+            }
+        }
     }
     enabled = True
     category = "OCR"
@@ -29,14 +30,11 @@ class AbbyyOCR(RodanTask):
 
     input_port_types = [{
         'name': 'input_image',
-        'resource_types': ['image/png',
-                           'image/jpeg',
-                           'image/jp2',
-                           'image/tiff',
-                           'image/bmp',
-                           'application/pdf',
-                           'image/x-pcx',
-                           'image/x-dcx'],
+        'resource_types': [
+            'image/png', 'image/jpeg', 'image/jp2', 'image/tiff',
+            'image/bmp', 'image/x-pcx', 'image/x-dcx',
+            'application/pdf'
+            ],
         'minimum': 1,
         'maximum': 1
     }]
@@ -61,7 +59,7 @@ class AbbyyOCR(RodanTask):
         subprocess.call(abbyy_instruction)
         return True
 
-    # # Still in process   
+    # # Still in process
     # def test_my_task(self, testcase):
     # # Test formats
     #     outputs = {
