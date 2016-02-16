@@ -51,12 +51,11 @@ class AbbyyOCR(RodanTask):
         output_file = outputs['export_file'][0]['resource_path']
         language_recognition_key = ""
         if settings['Languages'] == 0:
-        	language_recognition_key = "-rl English"
-        else if settings['Languages'] == 1:
-        	language_recognition_key = "-rl Italian"
+        	language_recognition_key = "English"
+        elif settings['Languages'] == 1:
+        	language_recognition_key = "Italian"
         # CL Abbyy instruction for OCR
-        abbyy_instruction = "abbyyocr11 " + language_recognition_key + " -if " + input_file  + " -f " + "XML" + " -of " + output_file
-        subprocess.call(abbyy_instruction)
+        subprocess.call(["abbyyocr11", "-rl", language_recognition_key, "-if", input_file, "-f", "XML", "-of", output_file])
         return True
 
     # # Still in process
