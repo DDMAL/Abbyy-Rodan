@@ -1,7 +1,7 @@
 #--------------------------------------------------------------------------------------------------
 # Program Name:         abbyy_ocr.py
 # Program Description:  Job wrappers for ABBYY to work inside Rodan, in order to use
-#                       the capabilities of OCR from the first, inside a Rodan workflow
+#                       the capabilities of OCR from the first inside a Rodan workflow
 # WORK IN PROGRESS
 #--------------------------------------------------------------------------------------------------
 
@@ -9,6 +9,7 @@ import subprocess
 from rodan.jobs.base import RodanTask
 
 class AbbyyOCR(RodanTask):
+    """Wrap ABBYY inside Rodan."""
     name = "OCR image with ABBYY"
     author = "Martha Thomae & Gabriel Vigliensoni"
     description = "Performs Abbyy OCR in document"
@@ -46,6 +47,7 @@ class AbbyyOCR(RodanTask):
     }]
 
     def run_my_task(self, inputs, settings, outputs):
+        """Send the command line instruction to perform OCR with ABBYY, given the input and output files and the languate settings selected by the user."""
         # The 3 parameters we are giving Abbyy to do OCR: the input and output files, and the language recognition key
         input_file = inputs['Input image for OCR'][0]['resource_path']
         output_file = outputs['XML file: result of OCR'][0]['resource_path']
