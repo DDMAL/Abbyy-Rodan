@@ -47,7 +47,7 @@ class AbbyyOCR(RodanTask):
 
     def run_my_task(self, inputs, settings, outputs):
         # The 3 parameters we are giving Abbyy to do OCR: the input and output files, and the language recognition key
-        input_file = inputs['Input image'][0]['resource_path']
+        input_file = inputs['Input image for OCR'][0]['resource_path']
         output_file = outputs['XML file: result of OCR'][0]['resource_path']
         language_recognition_key = ""
         if settings['Languages'] == 0:
