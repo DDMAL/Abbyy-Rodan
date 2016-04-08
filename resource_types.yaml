@@ -1,22 +1,3 @@
-- mimetype: image/png
-  extension: png
-
-- mimetype: image/jpeg
-  description: JPEG
-  extension: jpeg
-
-- mimetype: image/jp2
-  description: JPEG2000
-  extension: jp2
-
-- mimetype: image/tiff
-  description: TIFF
-  extension: tiff
-
-- mimetype: image/bmp
-  description: BMP (Generic Bitmap)
-  extension: bmp
-
 - mimetype: image/x-pcx
   description: PCX (Paintbrush Bitmap)
   extension: pcx
@@ -31,7 +12,3 @@
 - mimetype: application/abbyy+xml
   description: Abbyy output XML
   extension: xml
-
-- mimetype: application/abbyy+txt
-  description: Abbyy output text file (.txt)
-  extension: txt

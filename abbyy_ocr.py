@@ -32,7 +32,7 @@ class AbbyyOCR(RodanTask):
     input_port_types = [{
         'name': 'Input image for OCR',
         'resource_types': [
-            'image/png', 'image/jpeg', 'image/jp2', 'image/tiff',
+            'image/onebit+png', 'image/png', 'image/jpeg', 'image/jp2', 'image/tiff',
             'image/bmp', 'image/x-pcx', 'image/x-dcx',
             'application/pdf'
             ],
@@ -40,9 +40,15 @@ class AbbyyOCR(RodanTask):
         'maximum': 1
     }]
     output_port_types = [{
-        'name': 'Output file: result of OCR',
-        'resource_types': ['application/abbyy+xml', 'application/abbyy+txt'],
-        'minimum': 1,
+        'name': 'Output file: Abbyy XML',
+        'resource_types': ['application/abbyy+xml'],
+        'minimum': 0,
+        'maximum': 1
+    },
+    {
+        'name': 'Output file: text',
+        'resource_types': ['text/plain'],
+        'minimum': 0,
         'maximum': 1
     }]
 
@@ -51,6 +57,7 @@ class AbbyyOCR(RodanTask):
         # The 3 parameters we are giving Abbyy to do OCR: the input and output files, and the language recognition key
         # The 3 parameters we are giving Abbyy to do OCR: the input and output files, and the language recognition key
         input_file = inputs['Input image for OCR'][0]['resource_path']
+	# MARTHA, START HERE!!! :)
         output_file = outputs['Output file: result of OCR'][0]['resource_path']
         output_type = outputs['Output file: result of OCR'][0]['resource_type']
         language_recognition_key = ""
@@ -59,10 +66,6 @@ class AbbyyOCR(RodanTask):
         elif settings['Languages'] == 1:
             language_recognition_key = "Italian"
         # CL Abbyy instruction for OCR
-        if output_type == 'application/abbyy+xml':
-            format_options = "XML"
-        elif output_type == 'application/abbyy+txt':
-            format_options = "TextUnicodeDefaults -tet UTF8"
         subprocess.call(["abbyyocr11", "-rl", language_recognition_key, "-if", input_file, "-f", format_options, "-of", output_file])
 
         return True
