@@ -31,3 +31,7 @@
 - mimetype: application/abbyy+xml
   description: Abbyy output XML
   extension: xml
+
+- mimetype: application/abbyy+txt
+  description: Abbyy output text file (.txt)
+  extension: txt
