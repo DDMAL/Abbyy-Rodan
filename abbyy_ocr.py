@@ -2,7 +2,6 @@
 # Program Name:         abbyy_ocr.py
 # Program Description:  Job wrappers for ABBYY to work inside Rodan, in order to use
 #                       the capabilities of OCR from the first inside a Rodan workflow
-# WORK IN PROGRESS
 #--------------------------------------------------------------------------------------------------
 
 import subprocess
@@ -32,7 +31,8 @@ class AbbyyOCR(RodanTask):
     input_port_types = [{
         'name': 'Input image for OCR',
         'resource_types': [
-            'image/onebit+png', 'image/png', 'image/jpeg', 'image/jp2', 'image/tiff',
+            'image/onebit+png', 'image/rgb+png', 'image/greyscale+png', 'image/grey16+png',
+            'image/png', 'image/jpeg', 'image/jp2', 'image/tiff',
             'image/bmp', 'image/x-pcx', 'image/x-dcx',
             'application/pdf'
             ],
@@ -42,137 +42,30 @@ class AbbyyOCR(RodanTask):
     output_port_types = [{
         'name': 'Output file: Abbyy XML',
         'resource_types': ['application/abbyy+xml'],
-        'minimum': 0,
+        'minimum': 1,
         'maximum': 1
     },
     {
         'name': 'Output file: text',
         'resource_types': ['text/plain'],
-        'minimum': 0,
+        'minimum': 1,
         'maximum': 1
     }]
 
     def run_my_task(self, inputs, settings, outputs):
         """Send the command line instruction to perform OCR with ABBYY, given the input and output files and the languate settings selected by the user."""
         # The 3 parameters we are giving Abbyy to do OCR: the input and output files, and the language recognition key
-        # The 3 parameters we are giving Abbyy to do OCR: the input and output files, and the language recognition key
         input_file = inputs['Input image for OCR'][0]['resource_path']
-	# MARTHA, START HERE!!! :)
-        output_file = outputs['Output file: result of OCR'][0]['resource_path']
-        output_type = outputs['Output file: result of OCR'][0]['resource_type']
+        output_file_xml = outputs['Output file: Abbyy XML'][0]['resource_path']
+        output_file_text = outputs['Output file: text'][0]['resource_path']
         language_recognition_key = ""
         if settings['Languages'] == 0:
             language_recognition_key = "English"
         elif settings['Languages'] == 1:
             language_recognition_key = "Italian"
+        format_options_xml = "XML"
+        format_options_text = "TextUnicodeDefaults -tet UTF8"
         # CL Abbyy instruction for OCR
-        subprocess.call(["abbyyocr11", "-rl", language_recognition_key, "-if", input_file, "-f", format_options, "-of", output_file])
+        subprocess.call(["abbyyocr11", "-rl", language_recognition_key, "-if", input_file, "-f", format_options_text, "-of", output_file_text, "-f", format_options_xml, "-of", output_file_xml])
 
         return True
-
-    # # Still in process
-    # def test_my_task(self, testcase):
-    # # Test formats
-    #     outputs = {
-    #         'Output file: result of OCR': [
-    #             {'resource_type': 'application/abbyy+xml',
-    #              'resource_path': testcase.new_available_path()
-    #             }
-    #         ]
-    #     }
-
-    #     inputs = {
-    #         'Input image for OCR': [
-    #             {'resource_type': 'image/png',
-    #              'resource_path': testcase.new_available_path()
-    #             }
-    #         ]
-    #     }
-    #     PIL.Image.new("RGBA", size=(50, 50), color=(256, 0, 0)).save(inputs['Input image for OCR'][0]['resource_path'], 'PNG')
-    #     self.run_my_task(inputs, {}, outputs)
-    #     #result = PIL.Image.open(outputs['Output file: result of OCR'][0]['resource_path'])	# IT IS AN XML, SO THESE TWO LINES MAY BE USELESS!
-    #     #testcase.assertEqual(result.format, 'XML')
-
-    #     inputs = {
-    #         'Input image for OCR': [
-    #             {'resource_type': 'image/jpeg',
-    #              'resource_path': testcase.new_available_path()
-    #             }
-    #         ]
-    #     }
-    #     PIL.Image.new("RGBA", size=(50, 50), color=(256, 0, 0)).save(inputs['Input image for OCR'][0]['resource_path'], 'JPEG')
-    #     self.run_my_task(inputs, {}, outputs)
-    #     #result = PIL.Image.open(outputs['Output file: result of OCR'][0]['resource_path'])
-    #     #testcase.assertEqual(result.format, 'XML')
-
-    #     inputs = {
-    #         'Input image for OCR': [
-    #             {'resource_type': 'image/jp2',
-    #              'resource_path': testcase.new_available_path()
-    #             }
-    #         ]
-    #     }
-    #     PIL.Image.new("RGBA", size=(50, 50), color=(256, 0, 0)).save(inputs['Input image for OCR'][0]['resource_path'], 'JPEG2000')
-    #     self.run_my_task(inputs, {}, outputs)
-    #     #result = PIL.Image.open(outputs['Output file: result of OCR'][0]['resource_path'])
-    #     #testcase.assertEqual(result.format, 'XML')
-
-    #     inputs = {
-    #         'Input image for OCR': [
-    #             {'resource_type': 'image/tiff',
-    #              'resource_path': testcase.new_available_path()
-    #             }
-    #         ]
-    #     }
-    #     PIL.Image.new("RGBA", size=(50, 50), color=(256, 0, 0)).save(inputs['Input image for OCR'][0]['resource_path'], 'TIFF')
-    #     self.run_my_task(inputs, {}, outputs)
-    #     #result = PIL.Image.open(outputs['Output file: result of OCR'][0]['resource_path'])
-    #     #testcase.assertEqual(result.format, 'XML')
-
-    #     inputs = {
-    #         'Input image for OCR': [
-    #             {'resource_type': 'image/bmp',
-    #              'resource_path': testcase.new_available_path()
-    #             }
-    #         ]
-    #     }
-    #     PIL.Image.new("RGBA", size=(50, 50), color=(256, 0, 0)).save(inputs['Input image for OCR'][0]['resource_path'], 'BMP')
-    #     self.run_my_task(inputs, {}, outputs)
-    #     #result = PIL.Image.open(outputs['Output file: result of OCR'][0]['resource_path'])
-    #     #testcase.assertEqual(result.format, 'XML')
-
-    #     inputs = {
-    #         'Input image for OCR': [
-    #             {'resource_type': 'image/x-pcx',
-    #              'resource_path': testcase.new_available_path()
-    #             }
-    #         ]
-    #     }
-    #     PIL.Image.new("RGBA", size=(50, 50), color=(256, 0, 0)).save(inputs['Input image for OCR'][0]['resource_path'], 'PCX')
-    #     self.run_my_task(inputs, {}, outputs)
-    #     #result = PIL.Image.open(outputs['Output file: result of OCR'][0]['resource_path'])
-    #     #testcase.assertEqual(result.format, 'XML')
-
-    #     inputs = {
-    #         'Input image for OCR': [
-    #             {'resource_type': 'image/x-dcx',
-    #              'resource_path': testcase.new_available_path()
-    #             }
-    #         ]
-    #     }
-    #     PIL.Image.new("RGBA", size=(50, 50), color=(256, 0, 0)).save(inputs['Input image for OCR'][0]['resource_path'], 'DCX')
-    #     self.run_my_task(inputs, {}, outputs)
-    #     #result = PIL.Image.open(outputs['Output file: result of OCR'][0]['resource_path'])
-    #     #testcase.assertEqual(result.format, 'XML')
-
-    #     inputs = {
-    #         'Input image for OCR': [
-    #             {'resource_type': 'application/pdf',
-    #              'resource_path': testcase.new_available_path()
-    #             }
-    #         ]
-    #     }
-    #     PIL.Image.new("RGBA", size=(50, 50), color=(256, 0, 0)).save(inputs['Input image for OCR'][0]['resource_path'], 'PDF')
-    #     self.run_my_task(inputs, {}, outputs)
-    #     #result = PIL.Image.open(outputs['Output file: result of OCR'][0]['resource_path'])
-    #     #testcase.assertEqual(result.format, 'XML')
