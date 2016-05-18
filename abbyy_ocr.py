@@ -63,9 +63,7 @@ class AbbyyOCR(RodanTask):
             language_recognition_key = "English"
         elif settings['Languages'] == 1:
             language_recognition_key = "Italian"
-        format_options_xml = "XML"
-        format_options_text = "TextUnicodeDefaults -tet UTF8"
         # CL Abbyy instruction for OCR
-        subprocess.call(["abbyyocr11", "-rl", language_recognition_key, "-if", input_file, "-f", format_options_text, "-of", output_file_text, "-f", format_options_xml, "-of", output_file_xml])
+        subprocess.call(["abbyyocr11", "-rl", language_recognition_key, "-if", input_file, "-f", "TextUnicodeDefaults", "-tet", "UTF8", "-of", output_file_text, "-f", "XML", "-of", output_file_xml])
 
         return True
